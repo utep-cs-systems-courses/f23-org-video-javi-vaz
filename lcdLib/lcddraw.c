@@ -115,3 +115,27 @@ void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height,
   fillRectangle(colMin + width, rowMin, 1, height, colorBGR);
 }
 
+void drawCircle(short row, short col, u_int r, u_int colorBGR)
+{
+    int sr = 0;
+    for (int j = 1; j <=r; j++)
+      sr += j;
+    int x = r;
+    int y = 0;
+    int sx = sr;
+    int sy = 0;
+    while (y <= (r/2)) { // rows less than r/2
+      drawPixel(x+col, y+row, colorBGR);
+      drawPixel(x+col, -y+row, colorBGR);
+      drawPixel(-x+col, y+row, colorBGR);
+      drawPixel(-x+col, -y+row, colorBGR);
+      drawPixel(y+col, x+row, colorBGR);
+      drawPixel(y+col, -x+row, colorBGR);
+      drawPixel(-y+col, x+row, colorBGR);
+      drawPixel(-y+col, -x+row, colorBGR);
+      y+=1; sy+=y;
+      if ((sx + sy) > sr) { // if outside the circle
+	sx -= x;  x -= 1;  // decrease x
+      }
+    }
+}
