@@ -63,7 +63,6 @@ void drawRectOutline(u_char colMin, u_char rowMin, u_char width, u_char height,
 
 void drawCircle(short row, short col, u_int radius, u_int colorBGR);
 
-
 #endif // included
 
 

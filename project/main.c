@@ -10,8 +10,9 @@ short redrawScreen = 1;
 u_int controlFontColor = COLOR_GREEN;
 
 short clearCount = 0;
-short drawPos[8] = {1, 32, 1, 64, 1, 96, 1, 128}, controlPos[8] = {2, 32, 2, 64, 2, 96, 2, 128};
-short colVelocity = 1, colLimits[2] = {1, screenWidth};
+short drawPos[8] = {1, 32, 15, 64, 66, 96, 90, 128}, controlPos[8] = {2, 32, 16, 64, 67, 96, 91, 128};
+short colVelocity[8] = {1,0,2,0,3,0,4,0};
+short colLimits[2] = {1, screenWidth};
 
 void
 draw_ball(int col, int row, unsigned short color)
@@ -51,13 +52,10 @@ int main(void)
     if (redrawScreen) {
       redrawScreen = 0;
       screen_update_ball();
-      if(clearCount>=50){
-	clearScreen(COLOR_BLUE);
-      }
     }
-    //P1OUT &= ~BIT6;/* led off */
+    P1OUT |= BIT6;/* led on */
     or_sr(0x10);/**< CPU OFF */
-    //P1OUT |= BIT6;/* led on */
+    P1OUT &= ~BIT6;/* led off */
   }
 }
 
@@ -72,21 +70,23 @@ wdt_c_handler()//__interrupt_vec(WDT_VECTOR) WDT()/* 250 interrupts/sec */
 {
   if (secondCount >= 25) {/* 10/sec */
     {/* move ball */
-      redrawScreen = 1;
       for(char axis = 0; axis < 8; axis+=2){
         short oldCol = controlPos[axis];
-        short newCol = oldCol + colVelocity;
+        short newCol = oldCol + colVelocity[axis];
         if (newCol <= colLimits[0] || newCol >= colLimits[1])
-	  colVelocity = -colVelocity;
+	  colVelocity[axis] = -colVelocity[axis];
         else
 	  controlPos[axis] = newCol;
       }
     }
-    P1OUT ^= BIT6;
     secondCount = 0;
     clearCount++;
   }
   secondCount++;
+  if(clearCount >= 50){
+    clearScreen(COLOR_BLUE);
+    clearCount = 0;
+  }
 }
 
 void

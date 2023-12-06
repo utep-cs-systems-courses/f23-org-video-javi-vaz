@@ -11,6 +11,7 @@
 extern short drawPos[8];
 extern short colPos[8];
 extern short clearCount;
+extern short redrawScreen;
 
 void switch_init();
 void switch_interrupt_handler();

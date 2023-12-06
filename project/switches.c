@@ -33,26 +33,31 @@ switch_interrupt_handler()
   char p2val = switch_update_interrupt_sense();
   switches = ~p2val & SWITCHES;
   if (switches & SW1) {
+    redrawScreen = 1;
     buzzer_set_period(478); /* C */
-    drawCircle(drawPos[0],drawPos[1], 3, COLOR_WHITE);
-    drawCircle(drawPos[1],drawPos[0],6,COLOR_WHITE);
+    drawCircle(drawPos[0],drawPos[1], 5, COLOR_WHITE);
+    drawCircle(drawPos[1],drawPos[0],10,COLOR_PINK);
     clearCount = 0;
   }else if(switches & SW2){
+    redrawScreen = 1;
     buzzer_set_period(425); /* D */
-    drawCircle(drawPos[2],drawPos[3], 5, COLOR_WHITE);
+    drawCircle(drawPos[2],drawPos[3], 30, COLOR_RED);
     drawCircle(drawPos[3],drawPos[2],7,COLOR_WHITE);
     clearCount = 0;
   }else if (switches & SW3) {
+    redrawScreen = 1;
     buzzer_set_period(379); /* E */
     drawCircle(drawPos[4],drawPos[5], 4, COLOR_WHITE);
-    drawCircle(drawPos[5],drawPos[4],8,COLOR_WHITE);
+    drawCircle(drawPos[5],drawPos[4],16,COLOR_GREEN);
     clearCount = 0;
   }else if(switches & SW4){
+    redrawScreen = 1;
     buzzer_set_period(338); /* F */
-    drawCircle(drawPos[6],drawPos[7], 2, COLOR_WHITE);
+    drawCircle(drawPos[6],drawPos[7], 15, COLOR_YELLOW);
     drawCircle(drawPos[7],drawPos[6],10,COLOR_WHITE);
     clearCount = 0;
   } else {
+    redrawScreen = 0;
     buzzer_set_period(0);
   }
 }
